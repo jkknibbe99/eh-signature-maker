@@ -17,8 +17,6 @@
             <h1 class="ms-5">Signature Maker</h1>
         </header>
 
-        
-
         <main style="max-width: 1000px; margin: auto;">
             <div class="d-flex flex-wrap">
                 <div class="card shadow-sm m-2 flex-fill" style="flex-grow: 1">
@@ -42,9 +40,20 @@
                                 <label for="phoneInput" class="form-label">Phone Number</label>
                                 <input name="phone" type="tel" class="form-control" id="phoneInput">
                             </div>
+                            <div class="mb-3" id="extSwitchField">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="extSwitch" checked>
+                                    <label class="form-check-label" for="extSwitch">Display Extension</label>
+                                </div>
+                            </div>
+                            <div class="mb-3" id="extField">
+                                <label for="extInput" class="form-label">Extension</label>
+                                <input name="extension" type="number" class="form-control" id="extInput">
+                            </div>
                         </form>
                     </div>
                 </div>
+
                 <div class="card shadow-sm m-2" style="flex-grow: 1">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center">
                         <h2 class="mb-5">Your Signature</h2>
@@ -86,6 +95,10 @@
                                                                         <img decoding="async" src="https://jkknibbe99.github.io/eh-signature-maker/images/phone.png" height="10" width="10" alt="P:" referrerpolicy="no-referrer">
                                                                         &nbsp;
                                                                         <span name="phone">616 453 3212</span>
+                                                                        <span class="extension-container visually-hidden">
+                                                                            | Ext. 
+                                                                            <span name="extension"></span>
+                                                                        </span>
                                                                     </p>
                                                                     <p color="#000000" style="position: relative; margin: 0px; color: rgb(0, 0, 0); font-size: 14px; line-height: 20px;">
                                                                         <img decoding="async" src="https://jkknibbe99.github.io/eh-signature-maker/images/globe.png" height="10" width="10" alt="W:" referrerpolicy="no-referrer">
@@ -120,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow-sm m-2">
+            <div id="instructions-card" class="card shadow-sm m-2">
                 <div class="card-body bg-light">
                     <div class="mb-1 ms-3">
                         <h4>Add Signature to Outlook</h4>
@@ -132,7 +145,7 @@
                             }
                         </style>
                         <li class="nav-item">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desktopAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Desktop</button>
+                            <button class="nav-link desktop active" data-bs-toggle="tab" data-bs-target="#desktopAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Desktop</button>
                             <script>
                                 // Display/hide desktopAdd div
                                 function toggleDesktopAddDiv() {
@@ -146,7 +159,7 @@
                             </script>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mobileAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Smartphone</button>
+                            <button class="nav-link mobile" data-bs-toggle="tab" data-bs-target="#mobileAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Smartphone</button>
                             <script>
                                 // Display/hide mobileAdd div
                                 function togglemobileAddDiv() {
@@ -230,6 +243,13 @@
                                 } else if (value.length > 6) {
                                     value = `${value.substring(0, 3)} ${value.substring(3)}`;
                                 }
+                            } else if (input.name === 'extension') {
+                                const extContainer = document.querySelector('.extension-container');
+                                if (value.length > 0) {
+                                    extContainer.classList.remove('visually-hidden');
+                                } else {
+                                    extContainer.classList.add('visually-hidden');
+                                }
                             }
                             document.querySelectorAll(`#signature [name=${input.name}]`).forEach((item) => {
                                 item.innerHTML = value
@@ -245,17 +265,39 @@
                 document.querySelector('#phoneSwitch').addEventListener('change', function() {
                     const phoneField = document.querySelector('#phoneField');
                     const phoneInput = phoneField.querySelector('input');
+                    const extSwitchField = document.querySelector('#extSwitchField');
+                    const extField = document.querySelector('#extField');
+                    const extInput = extField.querySelector('input');
+                    const extContainer = document.querySelector('.extension-container');
                     if(this.checked) {
                         phoneField.classList.remove('visually-hidden');
                         phoneInput.value = '';
                         phoneInput.dispatchEvent(new Event('change'));
-                        // phoneInput.dispatchEvent(new KeyboardEvent('keydown', { key: '0' }));
+                        extSwitchField.classList.add('visually-hidden');
+                        extField.classList.add('visually-hidden');
+                        extContainer.classList.add('visually-hidden');
                     } else {
                         phoneField.classList.add('visually-hidden');
                         phoneInput.value = '616 453 3212';
                         phoneInput.dispatchEvent(new Event('change'));
+                        extSwitchField.classList.remove('visually-hidden');
+                        extField.classList.remove('visually-hidden');
+                        extInput.dispatchEvent(new Event('change'));
+                    }
+                });
 
-                        // phoneInput.dispatchEvent(new KeyboardEvent('keydown', { key: '0' }));
+
+                // Extension switch
+                document.querySelector('#extSwitch').addEventListener('change', function() {
+                    const extField = document.querySelector('#extField');
+                    const extInput = extField.querySelector('input');
+                    const extContainer = document.querySelector('.extension-container');
+                    if(this.checked) {
+                        extField.classList.remove('visually-hidden');
+                        extInput.dispatchEvent(new Event('change'));
+                    } else {
+                        extField.classList.add('visually-hidden');
+                        extContainer.classList.add('visually-hidden');
                     }
                 });
 
@@ -305,6 +347,21 @@
                     // Remove the container
                     // [6]
                     document.body.removeChild(container)
+                }
+            
+                
+                // If mobile, show mobile instructions and hide desktop instructions
+                const isMobile = window.matchMedia("(any-pointer:coarse)").matches;
+                if (isMobile) {
+                    document.querySelector('#mobileAdd').style.display = 'block';
+                    document.querySelector('#desktopAdd').style.display = 'none';
+                    document.querySelector('#instructions-card .nav-link.mobile').classList.add('active');
+                    document.querySelector('#instructions-card .nav-link.desktop').classList.remove('active');
+                } else {
+                    document.querySelector('#mobileAdd').style.display = 'none';
+                    document.querySelector('#desktopAdd').style.display = 'block';
+                    document.querySelector('#instructions-card .nav-link.mobile').classList.remove('active');
+                    document.querySelector('#instructions-card .nav-link.desktop').classList.add('active');
                 }
             </script>
         </main>
