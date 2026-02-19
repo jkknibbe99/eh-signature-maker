@@ -3,3 +3,6 @@ description: ""
 url: ""
 baseurl: ""
 markdown: kramdown
+exclude:
+  - .vscode/
+  - .github/
