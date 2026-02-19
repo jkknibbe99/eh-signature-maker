@@ -86,7 +86,7 @@
                                                                 <td width="5">
                                                                     <div></div>
                                                                 </td>
-                                                                <td style="padding: 0px; vertical-align: middle;">
+                                                                <td width="175" style="width: 175px; padding: 0px; vertical-align: middle;">
                                                                     <p color="#000000" style="margin: 0px; color: rgb(0, 0, 0); font-size: 14px; line-height: 20px; font-weight: 600">
                                                                         <span name="fullName">Fname Lname</span>
                                                                     </p>
@@ -99,17 +99,17 @@
                                                                     <p color="#000000" style="margin: 0px; color: rgb(0, 0, 0); font-size: 14px; line-height: 20px;">
                                                                         <img decoding="async" src="https://jkknibbe99.github.io/eh-signature-maker/images/phone.png" height="10" width="10" alt="P:" referrerpolicy="no-referrer">
                                                                         &nbsp;
-                                                                        <span name="phone" style="text-decoration: none; color: rgb(0, 0, 0);">616 453 3212</span>
-                                                                        <span class="extension-container visually-hidden">
+                                                                        <span name="phone" style="text-decoration: none; color: rgb(0, 0, 0);">{{ page.company_phone_number }}</span>
+                                                                        <span class="extension-container" style="display: none;">
                                                                             | Ext. 
                                                                             <span name="extension"></span>
                                                                         </span>
                                                                     </p>
-                                                                    <p color="#000000" style="position: relative; margin: 0px; color: rgb(0, 0, 0); font-size: 14px; line-height: 20px;">
+                                                                    <p color="#000000" style="position: relative; margin: 0px; color: rgb(0, 0, 0); font-size: 14px; line-height: 20px; white-space: nowrap;">
                                                                         <img decoding="async" src="https://jkknibbe99.github.io/eh-signature-maker/images/globe.png" height="10" width="10" alt="W:" referrerpolicy="no-referrer">
                                                                         &nbsp;
-                                                                        <a href="{{ page.company_website_url }}" color="#000000" style="text-decoration: none; color: rgb(0, 0, 0); font-size: 14px;">
-                                                                            <span>{{ page.company_website_domain }}</span>
+                                                                        <a href="{{ page.company_website_url }}" color="#000000" style="text-decoration: none; color: rgb(0, 0, 0); font-size: 14px; white-space: nowrap;">
+                                                                            <span style="text-decoration: none; color: rgb(0, 0, 0); white-space: nowrap;">{{ page.company_website_domain }}</span>
                                                                         </a>
                                                                     </p>
                                                                 </td>
@@ -182,21 +182,15 @@
                         <div class="card-body">
                             <h5>Add Signature to Outlook for desktop</h5>
                             <ul>
+                                <li>Click the <strong>Copy to clipboard</strong> button above</li>
                                 <li>Open Outlook</li>
-                                <li>Navigate to
-                                    <strong>
-                                        <ol class="breadcrumb mb-0" style="--bs-breadcrumb-divider: '>';">
-                                            <li class="breadcrumb-item">File</li>
-                                            <li class="breadcrumb-item">Options</li>
-                                        </ol>
-                                    </strong>
-                                </li>
+                                <li>Go to the <strong>File</strong> tab <em>(top left corner)</em></li>
+                                <li>Click <strong>Options</strong> <em>(left column near the bottom)</em></li>
                                 <li>Select <strong>Mail</strong> in the left column</li>
                                 <li>In the <strong>Compose messages</strong> section, click the <strong>Signatures...</strong> button
                                 </li>
-                                <li>Create a new signature and paste your new signature contents into the <strong>Edit
-                                        signature</strong>
-                                    textbox</li>
+                                <li>Create a new signature and paste your new signature contents into the <strong>Edit signature</strong> textbox</li>
+                                <li>Make sure to change your default signature for new messages and replies/forwards as desired</li>
                             </ul>
                         </div>
                     </div>
@@ -204,12 +198,11 @@
                         <div class="card-body">
                             <h5>Add Signature to Outlook app</h5>
                             <ul>
-                                <li>Click on the Copy button <i class="fa-solid fa-copy"></i> above to copy the contents of your new
-                                    signature</li>
+                                <li>Click on the <strong>Copy to clipboard</strong> button above</li>
                                 <li>Open your Outlook app</li>
                                 <li>Tap on your profile image in the top left corner</li>
                                 <li>Tap on the settings gear icon in the bottom left corner</li>
-                                <li>scroll down to find and tap 'Signature'</li>
+                                <li>scroll down to find and tap <strong>Signature</strong></li>
                                 <li>Tap on your current signature to edit it</li>
                                 <li>Delete all the contents of your current signature, then paste the new one in</li>
                             </ul>
@@ -251,9 +244,9 @@
                             } else if (input.name === 'extension') {
                                 const extContainer = document.querySelector('.extension-container');
                                 if (value.length > 0) {
-                                    extContainer.classList.remove('visually-hidden');
+                                    extContainer.style.display = 'inline';
                                 } else {
-                                    extContainer.classList.add('visually-hidden');
+                                    extContainer.style.display = 'none';
                                 }
                             }
                             document.querySelectorAll(`#signature [name=${input.name}]`).forEach((item) => {
@@ -280,10 +273,10 @@
                         phoneInput.dispatchEvent(new Event('change'));
                         extSwitchField.classList.add('visually-hidden');
                         extField.classList.add('visually-hidden');
-                        extContainer.classList.add('visually-hidden');
+                        extContainer.style.display = 'none';
                     } else {
                         phoneField.classList.add('visually-hidden');
-                        phoneInput.value = '616 453 3212';
+                        phoneInput.value = '{{ page.company_phone_number }}';
                         phoneInput.dispatchEvent(new Event('change'));
                         extSwitchField.classList.remove('visually-hidden');
                         extField.classList.remove('visually-hidden');
@@ -302,7 +295,7 @@
                         extInput.dispatchEvent(new Event('change'));
                     } else {
                         extField.classList.add('visually-hidden');
-                        extContainer.classList.add('visually-hidden');
+                        extContainer.style.display = 'none';
                     }
                 });
 
