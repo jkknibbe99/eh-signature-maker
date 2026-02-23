@@ -263,6 +263,7 @@
                     const phoneField = document.querySelector('#phoneField');
                     const phoneInput = phoneField.querySelector('input');
                     const extSwitchField = document.querySelector('#extSwitchField');
+                    const extSwitch = document.querySelector('#extSwitch');
                     const extField = document.querySelector('#extField');
                     const extInput = extField.querySelector('input');
                     const extContainer = document.querySelector('.extension-container');
@@ -278,7 +279,9 @@
                         phoneInput.value = '{{ page.company_phone_number }}';
                         phoneInput.dispatchEvent(new Event('change'));
                         extSwitchField.classList.remove('visually-hidden');
-                        extField.classList.remove('visually-hidden');
+                        if (extSwitch.checked) {
+                            extField.classList.remove('visually-hidden');
+                        }
                         extInput.dispatchEvent(new Event('change'));
                     }
                 });
