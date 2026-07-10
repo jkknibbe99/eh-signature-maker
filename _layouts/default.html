@@ -37,7 +37,10 @@
                             <div class="mb-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" role="switch" id="phoneSwitch">
-                                    <label class="form-check-label" for="phoneSwitch">User personal phone number</label>
+                                    <label class="form-check-label" for="phoneSwitch">Use personal phone number</label>
+                                    <div id="phoneSwitchHelp" class="form-text">
+                                        (If not, the company phone number will be used instead)
+                                    </div>
                                 </div>
                             </div>
                             <div class="mb-3 visually-hidden" id="phoneField">
@@ -46,11 +49,11 @@
                             </div>
                             <div class="mb-3" id="extSwitchField">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="extSwitch" checked>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="extSwitch">
                                     <label class="form-check-label" for="extSwitch">Display Extension</label>
                                 </div>
                             </div>
-                            <div class="mb-3" id="extField">
+                            <div class="mb-3 visually-hidden" id="extField">
                                 <label for="extInput" class="form-label">Extension</label>
                                 <input name="extension" type="number" class="form-control" id="extInput">
                             </div>
@@ -149,21 +152,21 @@
                             }
                         </style>
                         <li class="nav-item">
-                            <button class="nav-link desktop active" data-bs-toggle="tab" data-bs-target="#desktopAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Desktop</button>
+                            <button class="nav-link pc active" data-bs-toggle="tab" data-bs-target="#pcAdd" onclick="togglemobileAddDiv(); togglePcAddDiv();">PC</button>
                             <script>
-                                // Display/hide desktopAdd div
-                                function toggleDesktopAddDiv() {
-                                    const desktopAdd_div = document.querySelector('#desktopAdd');
-                                    if (desktopAdd_div.style.display == 'none') {
-                                        desktopAdd_div.style.display = 'block';
+                                // Display/hide pcAdd div
+                                function togglePcAddDiv() {
+                                    const pcAdd_div = document.querySelector('#pcAdd');
+                                    if (pcAdd_div.style.display == 'none') {
+                                        pcAdd_div.style.display = 'block';
                                     } else {
-                                        desktopAdd_div.style.display = 'none';
+                                        pcAdd_div.style.display = 'none';
                                     }
                                 }
                             </script>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link mobile" data-bs-toggle="tab" data-bs-target="#mobileAdd" onclick="togglemobileAddDiv(); toggleDesktopAddDiv();">Smartphone</button>
+                            <button class="nav-link mobile" data-bs-toggle="tab" data-bs-target="#mobileAdd" onclick="togglemobileAddDiv(); togglePcAddDiv();">Smartphone</button>
                             <script>
                                 // Display/hide mobileAdd div
                                 function togglemobileAddDiv() {
@@ -177,9 +180,9 @@
                             </script>
                         </li>
                     </ul>
-                    <div id="desktopAdd" class="card mb-3" style="border-top: none;">
+                    <div id="pcAdd" class="card mb-3" style="border-top: none;">
                         <div class="card-body">
-                            <h5>Add Signature to Outlook for desktop</h5>
+                            <h5>Add Signature to Outlook for PC</h5>
                             <ul>
                                 <li>Click the <strong>Copy to clipboard</strong> button above</li>
                                 <li>Open Outlook</li>
@@ -262,6 +265,7 @@
                 document.querySelector('#phoneSwitch').addEventListener('change', function() {
                     const phoneField = document.querySelector('#phoneField');
                     const phoneInput = phoneField.querySelector('input');
+                    const phoneSwitchHelp = document.querySelector('#phoneSwitchHelp');
                     const extSwitchField = document.querySelector('#extSwitchField');
                     const extSwitch = document.querySelector('#extSwitch');
                     const extField = document.querySelector('#extField');
@@ -270,6 +274,7 @@
                     if(this.checked) {
                         phoneField.classList.remove('visually-hidden');
                         phoneInput.value = '';
+                        phoneSwitchHelp.classList.add('visually-hidden');
                         phoneInput.dispatchEvent(new Event('change'));
                         extSwitchField.classList.add('visually-hidden');
                         extField.classList.add('visually-hidden');
@@ -277,6 +282,7 @@
                     } else {
                         phoneField.classList.add('visually-hidden');
                         phoneInput.value = '{{ page.company_phone_number }}';
+                        phoneSwitchHelp.classList.remove('visually-hidden');
                         phoneInput.dispatchEvent(new Event('change'));
                         extSwitchField.classList.remove('visually-hidden');
                         if (extSwitch.checked) {
@@ -350,18 +356,18 @@
                 }
             
                 
-                // If mobile, show mobile instructions and hide desktop instructions
-                const isMobile = window.matchMedia("(any-pointer:coarse)").matches;
+                // If mobile, show mobile instructions and hide PC instructions
+                const isMobile = window.matchMedia("(pointer:coarse)").matches;
                 if (isMobile) {
                     document.querySelector('#mobileAdd').style.display = 'block';
-                    document.querySelector('#desktopAdd').style.display = 'none';
+                    document.querySelector('#pcAdd').style.display = 'none';
                     document.querySelector('#instructions-card .nav-link.mobile').classList.add('active');
-                    document.querySelector('#instructions-card .nav-link.desktop').classList.remove('active');
+                    document.querySelector('#instructions-card .nav-link.pc').classList.remove('active');
                 } else {
                     document.querySelector('#mobileAdd').style.display = 'none';
-                    document.querySelector('#desktopAdd').style.display = 'block';
+                    document.querySelector('#pcAdd').style.display = 'block';
                     document.querySelector('#instructions-card .nav-link.mobile').classList.remove('active');
-                    document.querySelector('#instructions-card .nav-link.desktop').classList.add('active');
+                    document.querySelector('#instructions-card .nav-link.pc').classList.add('active');
                 }
             </script>
         </main>
